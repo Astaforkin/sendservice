@@ -1,8 +1,14 @@
 asgiref==3.7.2
-Django==5.0.1
+Django==3.2.3
+djangorestframework==3.12.4
+django-cors-headers==3.13.0
 django-filter==23.5
-djangorestframework==3.14.0
-psycopg2==2.9.9
+psycopg2-binary==2.9.3
 pytz==2023.3.post1
 sqlparse==0.4.4
 typing_extensions==4.9.0
+celery==5.3.6
+django-celery-beat==2.5.0
+redis==5.0.1
+gunicorn==21.2.0
+flower==2.0.1

@@ -17,10 +17,6 @@ class Mailing(models.Model):
     date_time_stop_mailing = models.DateTimeField(
         verbose_name='дата и время окончания рассылки'
     )
-    is_sent = models.BooleanField(
-        default=False,
-        verbose_name='рассылка завершена'
-    )
 
 
 class Client(models.Model):
@@ -46,8 +42,4 @@ class Message(models.Model):
         Client,
         on_delete=models.CASCADE,
         related_name='messages'
-    )
-    is_delivered = models.BooleanField(
-        default=False,
-        verbose_name='сообщение доставлено'
     )

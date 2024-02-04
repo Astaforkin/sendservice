@@ -29,6 +29,7 @@ INSTALLED_APPS = [
     "mailing.apps.MailingConfig",
     "rest_framework",
     "django_filters",
+    'django_celery_beat'
 ]
 
 MIDDLEWARE = [

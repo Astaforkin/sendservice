@@ -10,7 +10,7 @@ class Mailing(models.Model):
         verbose_name='текст сообщения'
     )
     mobile_code = models.CharField(
-        max_length=100,
+        max_length=3,
         verbose_name='код мобильного оператора'
     )
     tag = models.CharField(max_length=100, verbose_name='тег')

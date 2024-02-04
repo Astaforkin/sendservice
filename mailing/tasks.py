@@ -3,6 +3,9 @@ from sendservice.celery import app
 from django.utils import timezone
 from celery.schedules import crontab
 import pytz
+from celery.utils.log import get_task_logger
+
+logger = get_task_logger(__name__)
 
 
 @app.task
@@ -21,23 +24,23 @@ def process_mailings():
             if not Message.objects.filter(
                 mailing=mailing, client=client
             ).exists():
-                send_message_to_client.delay(client, mailing)
+                send_message_to_client.delay(client_id=client.id, mailing_id=mailing.id)
 
 
 @app.task
-def send_message_to_client(client, mailing):
-    timezone = pytz.timezone(client.timezone)
-    message = Message.objects.create(
-        mailing=mailing,
-        client=client,
-        date_time_send=timezone.now()
-    )
-    print(f"Сообщение отправлено клиенту {client} с текстом: {message}")
+def send_message_to_client(client_id=None, mailing_id=None):
+    try:
+        client = Client.objects.get(id=client_id)
+        mailing = Mailing.objects.get(id=mailing_id)
+        timezone = pytz.timezone(client.timezone)
+        message = Message.objects.create(
+            mailing=mailing,
+            client=client,
+            date_time_send=timezone.now()
+        )
+        logger.info(f"Сообщение отправлено клиенту {message.client.tag} с текстом:{message.mailing.text_message}")
 
-
-app.conf.beat_schedule = {
-    'process-mailings-every-minute': {
-        'task': 'tasks.process_mailings',
-        'schedule': crontab(minute='*/1'),
-    }
-}
+    except Client.DoesNotExist:
+        logger.error(f"Клиент с id {client_id} не найден")
+    except Mailing.DoesNotExist:
+        logger.error(f"Рассылка с id {mailing_id} не найдена")

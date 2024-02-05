@@ -2,7 +2,7 @@ from rest_framework.routers import DefaultRouter
 
 from django.contrib import admin
 from django.urls import include, path
-from rest_framework.authtoken import views
+# from rest_framework.authtoken import views
 
 from mailing.views import MailingViewSet, ClientViewSet, MessageViewSet
 
@@ -16,5 +16,6 @@ router.register('messages', MessageViewSet)
 urlpatterns = [
     path("admin/", admin.site.urls),
     path('', include(router.urls)),
-    path('api-token-auth/', views.obtain_auth_token),
+    path('auth/', include('djoser.urls')),
+    path('auth/', include('djoser.urls.jwt')),
 ]

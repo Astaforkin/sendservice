@@ -28,6 +28,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "mailing.apps.MailingConfig",
     "rest_framework",
+    "rest_framework.authtoken",
     "django_filters",
     'django_celery_beat'
 ]
@@ -132,7 +133,7 @@ REST_FRAMEWORK = {
     ],
 
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
     ],
 }
 

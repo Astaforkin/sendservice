@@ -22,9 +22,7 @@ services:
     environment:
       - POSTGRES_NAME=postgres
       - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres   
-    env_file:
-      - .env
+      - POSTGRES_PASSWORD=postgres
   redis:
     container_name: redis
     image: redis:alpine
@@ -32,7 +30,20 @@ services:
   celery:
     build: .
     restart: always
-    command: celery worker --app=sendservice --loglevel=info
+    command: celery -A sendservice worker --loglevel=info
+    volumes:
+      - .:/app
+    environment:
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+    depends_on:
+      - redis
+      - web
+      - db
+  celery-beat:
+    build: .
+    restart: always
+    command: celery -A sendservice beat --loglevel=info
     volumes:
       - .:/app
     environment:

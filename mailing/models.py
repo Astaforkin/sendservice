@@ -1,4 +1,5 @@
 from django.db import models
+from django.core.validators import RegexValidator
 
 
 class Mailing(models.Model):
@@ -24,9 +25,15 @@ class Client(models.Model):
         max_length=11,
         verbose_name='номер телефона клиента'
     )
-    mobile_code = models.CharField(
-        max_length=3,
-        verbose_name='код мобильного оператора'
+    phone_number = models.CharField(
+        max_length=11,
+        verbose_name='номер телефона клиента',
+        validators=[
+            RegexValidator(
+                regex='^7[0-9]{10}$',
+                message='Номер телефона должен быть 7XXXXXXXXXX (X - цифра от 0 до 9) и содержать 11 цифр.'
+            )
+        ]
     )
     tag = models.CharField(max_length=100, verbose_name='тег')
 
